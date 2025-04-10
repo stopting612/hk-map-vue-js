@@ -1,15 +1,21 @@
 <template>
-  <div id="app">
-    <div ref="mapContainer" class="map"></div>
-    <div class="overlay-text">2d map</div>
+  <div class="flex h-screen w-screen">
+    <!-- Sidebar on the left -->
+    <LocationNavbar @select-location="moveToLocation" />
+
+    <!-- Map on the right -->
+    <div ref="mapContainer" class="flex-1 relative">
+      <div class="overlay-text">2d map</div>
+    </div>
   </div>
+
+ 
+
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import "leaflet.polyline.snakeanim/L.Polyline.SnakeAnim";
+import LocationNavbar from '../components/LocationNavbar.vue'
 
 const mapContainer = ref(null);
 
@@ -43,13 +49,36 @@ onMounted(() => {
         // [22.3705, 114.1365], // Kwai Hing
         [22.3375, 114.1747], // Prince Edward
         [22.3185, 114.1703], // Tsim Sha Tsui
-        [22.3045, 114.185],  // Admiralty
+        [22.3045, 114.185], // Admiralty
       ],
     },
-   
-  ]
+  ];
 
-  // Draw each route
+  const motionPolyline = L.motion
+    .polyline(
+      [
+        [22.3027, 114.1772], // Central
+        [22.2783, 114.1747], // Causeway Bay
+        [22.3364, 114.1745], // Kowloon Tong
+      ],
+      { color: "blue" },
+      {
+        auto: true,
+        duration: 9800,
+        easing: L.Motion.Ease.easeInOutQuart,
+      },
+      {
+          removeOnEnd: false,
+          showMarker: true,
+          icon: L.divIcon({
+    html: "<img src='/car.svg' style='width: 30px; height: 30px;' />",
+    iconSize: L.point(30, 30),
+    className: ''
+  })
+      }
+    )
+    .addTo(map);
+
   mtrRoutes.forEach((route) => {
     const poly = L.polyline(route.coords, {
       color: route.color,
@@ -77,43 +106,14 @@ onMounted(() => {
 
   const imageUrl = "/a-tall-building-background.png";
 
-
-
   const imageBounds = [
-  [22.3040, 114.1845], // SW
-  [22.3080, 114.1865], // NE
-];
+    [22.304, 114.1845], // SW
+    [22.308, 114.1865], // NE
+  ];
   const overlay = L.imageOverlay(imageUrl, imageBounds).addTo(map);
-
 });
 </script>
 
 <style>
-html,
-body,
-#app {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
 
-#app {
-  display: flex;
-  flex-direction: column;
-}
-
-.map {
-  flex: 1;
-  width: 100%;
-}
-
-.overlay-text {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: "24px";
-  color: rgb(210, 49, 49);
-  z-index: 1000;
-}
 </style>

@@ -1,0 +1,44 @@
+
+[
+        {
+          "id": 1,
+          "name": "Victoria Peak",
+          "coordinates": [22.2758, 114.1455]
+        },
+        {
+          "id": 2,
+          "name": "Tsim Sha Tsui",
+          "coordinates": [22.2975, 114.1722]
+        },
+        {
+          "id": 3,
+          "name": "Central",
+          "coordinates": [22.2823, 114.1585]
+        },
+        {
+          "id": 4,
+          "name": "Tin Shui Wai",
+          "coordinates": [22.3002, 114.1672]
+
+        },
+        {
+          "id": 5,
+          "name": "Mong Kok",
+          "coordinates": [22.3193, 114.1694]
+        },
+        {
+          "id": 6,
+          "name": "Causeway Bay",
+          "coordinates": [22.2819, 114.1880]
+        },
+        {
+          "id": 7,
+          "name": "Tsing Yi",
+          "coordinates": [22.3662, 114.1211]
+        },
+        {
+          "id": 8,
+          "name": "Sha Tin",
+          "coordinates": [22.3811, 114.1860]
+        }
+      ]
