@@ -11,7 +11,6 @@
     <div class="flex-1 relative bg-gray-200">
       <div ref="mapContainer" class="absolute inset-0 z-0"></div>
 
-    
       <button
         class="absolute top-4 left-16 z-50 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow"
         @click="togglePopup"
@@ -19,7 +18,6 @@
         Button
       </button>
 
-    
       <div
         v-if="activePopup"
         class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
@@ -69,7 +67,16 @@ const togglePopup = () => {
 };
 
 onMounted(() => {
-  map = L.map(mapContainer.value).setView(currentPosition.value, 13);
+  map = L.map(mapContainer.value, {
+    zoomControl: false,
+  }).setView(currentPosition.value, 13);
+
+  // Disable all map zoom controls
+  map.scrollWheelZoom.disable();
+  map.doubleClickZoom.disable();
+  map.touchZoom.disable();
+  map.boxZoom.disable();
+  map.keyboard.disable();
 
   // Base map
   L.tileLayer(
@@ -88,19 +95,18 @@ onMounted(() => {
     }
   ).addTo(map);
 
-
-    // Add a marker at the starting point
+  // Add a marker at the starting point
   const buildingIcon = L.icon({
-  iconUrl: "/a-tall-building-background.png",
-  iconSize: [100,100],     // width, height in pixels
-  iconAnchor: [20, 40],   // anchor point (bottom center)
-});
+    iconUrl: "/a-tall-building-background.png",
+    iconSize: [100, 100], // width, height in pixels
+    iconAnchor: [20, 40], // anchor point (bottom center)
+  });
 
-L.marker([22.2783, 114.1747]).addTo(map)
-    .bindPopup("📍 Central, Hong Kong")
+  L.marker([22.2783, 114.1747]).addTo(map).bindPopup("📍 Central, Hong Kong");
 
-L.marker([22.3375, 114.1755], { icon: buildingIcon }).addTo(map)
-  .bindPopup("🏢 Custom Building");
+  L.marker([22.3375, 114.1755], { icon: buildingIcon })
+    .addTo(map)
+    .bindPopup("🏢 Custom Building");
 
   carMarker = L.marker(currentPosition.value, {
     icon: L.divIcon({
@@ -122,14 +128,14 @@ function moveToLocation(location) {
   //If already at destination, skip animation
   const start = currentPosition.value;
 
-    if (start[0] === destination[0] && start[1] === destination[1]) {
+  if (start[0] === destination[0] && start[1] === destination[1]) {
     isMoving.value = false;
     return;
   }
 
   // Draw a polyline from current to destination
   L.polyline([start, destination], {
-    color: 'blue',
+    color: "blue",
     weight: 4,
   }).addTo(map);
 
@@ -147,7 +153,6 @@ function moveToLocation(location) {
     carMarker.setLatLng([nextLat, nextLng]); // Update car position
     map.panTo([nextLat, nextLng]); // this will make the map follow the car
 
-
     if (step >= steps) {
       clearInterval(interval);
       currentPosition.value = destination;
@@ -155,7 +160,6 @@ function moveToLocation(location) {
     }
   }, duration / steps);
 }
-
 </script>
 
 <style>
